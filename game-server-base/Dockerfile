@@ -11,7 +11,7 @@ RUN dpkg --add-architecture i386 \
     && apt-get install -y --install-recommends winehq-$WINE_VERSION \
     && apt-get install -y \
          winbind \
-         xvfb
+         xvfb \
     && rm -rf /var/lib/apt/lists/*
 
 # Be sure to use --init when running
