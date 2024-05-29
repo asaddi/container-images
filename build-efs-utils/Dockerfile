@@ -1,4 +1,5 @@
-FROM ubuntu-base:latest
+ARG UBUNTU_VERSION=noble
+FROM ubuntu:$UBUNTU_VERSION
 
 RUN apt-get update \
     && apt-get install -y \
