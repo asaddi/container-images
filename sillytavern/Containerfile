@@ -1,0 +1,7 @@
+FROM ghcr.io/sillytavern/sillytavern:latest
+
+# This gets around an issue running the container on WSL+podman.
+# Apparently, it's some sort of nodejs issue trying to open the browser or something.
+# The common solution of setting BROWSER=none does not work.
+
+RUN mkdir -p /mnt/c/Windows/System32/WindowsPowerShell/v1.0 && ln -s /bin/true /mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe
