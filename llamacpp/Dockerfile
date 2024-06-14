@@ -1,7 +1,8 @@
 # Needs to be runtime or devel
 FROM nvidia/cuda:12.5.0-runtime-ubuntu22.04
 
-# Note: If it can't find libcuda.so.1, that means you forgot --gpus=all on "docker run"
+# Note: If it can't find libcuda.so.1, that means you forgot --gpus=all on "docker run".
+# But libgomp1 definitely needs to be added.
 RUN apt-get update \
     && apt-get install -y \
         libgomp1 \
