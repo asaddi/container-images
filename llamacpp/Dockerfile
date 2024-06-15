@@ -1,4 +1,13 @@
-FROM build-cuda AS builder
+ARG CUDA_VERSION=12.5.0
+ARG UBUNTU_VERSION=22.04
+
+FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu${UBUNTU_VERSION} AS builder
+
+RUN apt-get update \
+    && apt-get install -y \
+        git \
+        cmake \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /
 
@@ -16,7 +25,7 @@ RUN git checkout ${GIT_HASH} \
     && cmake --build build --config Release -j8
 
 # Needs to be runtime or devel
-FROM nvidia/cuda:12.5.0-runtime-ubuntu22.04
+FROM nvidia/cuda:${CUDA_VERSION}-runtime-ubuntu${UBUNTU_VERSION}
 
 # Note: If it can't find libcuda.so.1, that means you forgot --gpus=all on "docker run".
 # But libgomp1 definitely needs to be added.
