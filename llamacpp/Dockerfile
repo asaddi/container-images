@@ -1,3 +1,12 @@
+FROM build-cuda AS builder
+
+WORKDIR /build
+
+COPY . .
+
+RUN cmake -B build -DLLAMA_CUDA=on \
+    && cmake --build build --config Release -j8
+
 # Needs to be runtime or devel
 FROM nvidia/cuda:12.5.0-runtime-ubuntu22.04
 
@@ -10,7 +19,7 @@ RUN apt-get update \
 
 WORKDIR /app
 
-COPY bin/* .
+COPY --from=builder /build/build/bin/llama-* .
 
 ENTRYPOINT ["/app/llama-server"]
 CMD ["--help"]
