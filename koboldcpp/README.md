@@ -1,3 +1,3 @@
-Use build-cuda to build.
+Set GIT_HASH to desired commit. Defaults to concedo. e.g.
 
-    make -j8 LLAMA_CUBLAS=1
+    docker build --build-arg GIT_HASH=v1.67 -t my-koboldcpp .
