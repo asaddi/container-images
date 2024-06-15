@@ -7,6 +7,10 @@ RUN git clone https://github.com/ggerganov/llama.cpp.git build
 WORKDIR /build
 
 ARG GIT_HASH=master
+# Not sure if the following is needed with cmake. Leave it out since it works without.
+#ARG CUDA_DOCKER_ARCH
+#ENV CUDA_DOCKER_ARCH=${CUDA_DOCKER_ARCH:-all}
+
 RUN git checkout ${GIT_HASH} \
     && cmake -B build -DLLAMA_CUDA=on \
     && cmake --build build --config Release -j8
@@ -20,6 +24,8 @@ RUN apt-get update \
     && apt-get install -y \
         libgomp1 \
     && rm -rf /var/lib/apt/lists/*
+
+# Ideally, we would also install the Python dependencies, but that seems to add another GB or two.
 
 WORKDIR /app
 
