@@ -39,8 +39,10 @@ RUN apt-get update \
 WORKDIR /app
 
 COPY --from=builder /build/build/bin/llama-* .
+COPY llama.sh .
+RUN chmod a+x llama.sh
 
-ENTRYPOINT ["/app/llama-server"]
+ENTRYPOINT ["/app/llama.sh"]
 CMD ["--help"]
 
 EXPOSE 8080
