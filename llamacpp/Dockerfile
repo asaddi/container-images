@@ -1,10 +1,14 @@
 FROM build-cuda AS builder
 
+WORKDIR /
+
+RUN git clone https://github.com/ggerganov/llama.cpp.git build
+
 WORKDIR /build
 
-COPY . .
-
-RUN cmake -B build -DLLAMA_CUDA=on \
+ARG GIT_HASH=master
+RUN git checkout ${GIT_HASH} \
+    && cmake -B build -DLLAMA_CUDA=on \
     && cmake --build build --config Release -j8
 
 # Needs to be runtime or devel

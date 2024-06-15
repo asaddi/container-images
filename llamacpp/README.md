@@ -1,6 +1,3 @@
-Run inside llama.cpp source.
+Set GIT_HASH to desired commit. Defaults to master. e.g.
 
-Note: Resulting image won't know what version it's from due to .git directory not copying over.
-(due to .dockerignore)
-
-A fix would be to check out the source inside the container. TODO.
+    docker build --build-arg GIT_HASH=b3147 -t my-llamacpp .
