@@ -19,7 +19,7 @@ ARG GIT_HASH=master
 #ENV CUDA_DOCKER_ARCH=${CUDA_DOCKER_ARCH:-all}
 
 RUN git checkout ${GIT_HASH} \
-    && cmake -B build -DLLAMA_CUDA=on \
+    && cmake -B build -DGGML_CUDA=on -DLLAMA_BUILD_TESTS=off \
     && cmake --build build --config Release -j8
 
 # Needs to be runtime or devel
