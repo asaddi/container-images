@@ -1,6 +1,8 @@
 #!/bin/sh
 
-BASE=$(dirname "$0")
+export LD_LIBRARY_PATH=/app/lib
+
+BASE=$(dirname "$0")/bin
 
 if [ $# -lt 1 -o "$1" = "--help" -o "$1" = "-h" ]; then
   {
