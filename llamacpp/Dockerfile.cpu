@@ -1,6 +1,6 @@
-ARG UBUNTU_VERSION=22.04
+ARG DEBIAN_VERSION=bookworm
 
-FROM ubuntu:${UBUNTU_VERSION} AS builder
+FROM debian:${DEBIAN_VERSION} AS builder
 
 RUN --mount=id=apt-builder,type=cache,target=/var/cache/apt \
     apt-get update && apt-get install -y \
@@ -17,12 +17,12 @@ ARG GIT_HASH=master
 
 RUN git checkout ${GIT_HASH} \
     && cmake -B build -DLLAMA_BUILD_TESTS=off --install-prefix /app \
-    && cmake --build build --config Release -j8 \
+    && cmake --build build --config Release -j$(nproc) \
     && cmake --install build --config Release
 
-FROM ubuntu:${UBUNTU_VERSION}
+FROM debian:${DEBIAN_VERSION}-slim
 
-# But libgomp1 definitely needs to be added. TODO Still true for CPU-only version?
+# libgomp1 definitely needs to be added.
 RUN --mount=type=cache,target=/var/cache/apt \
     apt-get update && apt-get install -y \
         libgomp1 \
@@ -38,5 +38,3 @@ COPY --chmod=0755 llama.sh .
 
 ENTRYPOINT ["/app/llama.sh"]
 CMD ["--help"]
-
-EXPOSE 8080
