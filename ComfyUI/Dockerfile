@@ -28,13 +28,16 @@ venv/bin/pip install -r requirements.txt
 chown -R $COMFYUI_UID:$COMFYUI_GID .
 EOF
 
-RUN groupadd --gid $COMFYUI_GID comfy-user \
-    && useradd -d /ComfyUI --uid $COMFYUI_UID --gid $COMFYUI_GID -M -N comfy-user \
-    && install -d -o $COMFYUI_UID -g $COMFYUI_GID /data
+COPY --chown=$COMFYUI_UID:$COMFYUI_GID extra_model_paths.yaml docker-entrypoint.sh .
+
+RUN <<EOF
+groupadd --gid $COMFYUI_GID comfy-user
+useradd -d /ComfyUI --uid $COMFYUI_UID --gid $COMFYUI_GID -M -N comfy-user
+install -d -o $COMFYUI_UID -g $COMFYUI_GID /data
+chmod a+x docker-entrypoint.sh
+EOF
 
 USER $COMFYUI_UID:$COMFYUI_GID
-COPY --chmod=0755 docker-entrypoint.sh .
-
 VOLUME ["/data"]
 EXPOSE 8188/tcp
 
