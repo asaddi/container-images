@@ -13,9 +13,10 @@ if [ "$1" = "shell" ]; then
 fi
 
 exec $BASE/venv/bin/python main.py \
-  --listen 0.0.0.0 \
-  --disable-auto-launch \
   --input-directory /data/input \
   --output-directory /data/output \
   --temp-directory /data \
-  "$@"
+  "$@" \
+  --listen 0.0.0.0 \
+  --port 8188 \
+  --disable-auto-launch
