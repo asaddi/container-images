@@ -12,11 +12,4 @@ if [ "$1" = "shell" ]; then
     exec /bin/bash "$@"
 fi
 
-exec $BASE/venv/bin/python main.py \
-  --input-directory /data/input \
-  --output-directory /data/output \
-  --temp-directory /data \
-  "$@" \
-  --listen 0.0.0.0 \
-  --port 8188 \
-  --disable-auto-launch
+exec $BASE/start.sh "$@"

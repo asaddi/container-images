@@ -28,13 +28,13 @@ venv/bin/pip install -r requirements.txt
 chown -R $UID:$GID .
 EOF
 
-COPY --chown=$UID:$GID extra_model_paths.yaml docker-entrypoint.sh .
+COPY --chown=$UID:$GID extra_model_paths.yaml docker-entrypoint.sh start.sh .
 
 RUN <<EOF
 groupadd --gid $GID comfy-user
 useradd -d /ComfyUI --uid $UID --gid $GID -M -N comfy-user
 install -d -o $UID -g $GID /data
-chmod a+x docker-entrypoint.sh
+chmod a+x docker-entrypoint.sh start.sh
 EOF
 
 FROM scratch
