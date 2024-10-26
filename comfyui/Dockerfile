@@ -1,5 +1,4 @@
-# Some things currently break in 3.12
-FROM python:3.11-slim AS build
+FROM python:3.12-slim AS build
 
 RUN --mount=type=cache,target=/var/cache/apt <<EOF
 export DEBIAN_FRONTEND=noninteractive
@@ -14,7 +13,7 @@ EOF
 
 ENV LANG=en_US.utf8
 
-ARG COMFYUI_TAG=v0.2.2
+ARG COMFYUI_TAG=v0.2.4
 ARG UID=1000
 ARG GID=1000
 
