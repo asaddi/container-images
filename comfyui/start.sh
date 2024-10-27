@@ -1,6 +1,7 @@
 #!/bin/sh
 BASE="$(realpath "$(dirname "$0")")"
 exec $BASE/venv/bin/python main.py \
+  --user-directory /data/user \
   --input-directory /data/input \
   --output-directory /data/output \
   --temp-directory /data \
