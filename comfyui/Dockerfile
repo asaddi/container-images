@@ -1,4 +1,4 @@
-FROM python:3.12-slim AS build
+FROM python:3.12-slim
 
 RUN --mount=type=cache,target=/var/cache/apt <<EOF
 export DEBIAN_FRONTEND=noninteractive
@@ -19,6 +19,12 @@ ARG GID=1000
 
 WORKDIR /ComfyUI
 
+ARG PIP_INDEX_URL=https://pypi.org/simple
+ARG PIP_EXTRA_INDEX_URL=https://download.pytorch.org/whl/cu124
+
+ENV PIP_INDEX_URL=$PIP_INDEX_URL
+ENV PIP_EXTRA_INDEX_URL=$PIP_EXTRA_INDEX_URL
+
 RUN --mount=type=cache,target=/root/.cache/pip <<EOF
 git clone https://github.com/comfyanonymous/ComfyUI.git /ComfyUI
 git checkout $COMFYUI_TAG
@@ -35,13 +41,6 @@ useradd -d /ComfyUI --uid $UID --gid $GID -M -N comfy-user
 install -d -o $UID -g $GID /data
 chmod a+x docker-entrypoint.sh start.sh
 EOF
-
-FROM scratch
-
-COPY --from=build / /
-
-ARG UID=1000
-ARG GID=1000
 
 USER $UID:$GID
 WORKDIR /ComfyUI
