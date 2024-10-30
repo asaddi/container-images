@@ -5,12 +5,20 @@ shopt -s nullglob
 
 BASE="$(realpath "$(dirname "$0")")"
 
+# Note: We use a symlink for custom_nodes because prestartup_scripts
+# are only executed in the original custom_nodes directory, not any
+# added by extra_model_paths.yaml. Is this a bug?
+if [ ! -e /data/custom_nodes ]; then
+    cp -Rp custom_nodes /data/custom_nodes
+fi
+mv custom_nodes custom_nodes.orig
+ln -s /data/custom_nodes
+
 # Ensure appropriate directories exist in the data volume
 mkdir -p /data/user /data/input /data/output /data/models/checkpoints \
   /data/models/clip /data/models/clip_vision /data/models/configs \
   /data/models/controlnet /data/models/embeddings /data/models/loras \
-  /data/models/unet \
-  /data/models/upscale_models /data/models/vae /data/custom_nodes \
+  /data/models/unet /data/models/upscale_models /data/models/vae \
   /data/pip-install
 
 # Install any additional requirements/wheels in /data/pip-install

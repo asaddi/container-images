@@ -43,7 +43,6 @@ chmod a+x docker-entrypoint.sh start.sh
 EOF
 
 USER $UID:$GID
-WORKDIR /ComfyUI
 VOLUME ["/data"]
 EXPOSE 8188/tcp
 
