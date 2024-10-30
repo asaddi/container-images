@@ -13,11 +13,24 @@ EOF
 
 ENV LANG=en_US.utf8
 
-ARG COMFYUI_TAG=v0.2.4
+ARG COMFYUI_TAG=v0.2.5
 ARG UID=1000
 ARG GID=1000
 
+RUN <<EOF
+groupadd --gid $GID comfy-user
+useradd -d /ComfyUI --uid $UID --gid $GID -M -N comfy-user
+install -d -o $UID -g $GID /data
+EOF
+
+USER $UID:$GID
+
 WORKDIR /ComfyUI
+
+RUN <<EOF
+git clone https://github.com/comfyanonymous/ComfyUI.git /ComfyUI
+git checkout $COMFYUI_TAG
+EOF
 
 ARG PIP_INDEX_URL=https://pypi.org/simple
 ARG PIP_EXTRA_INDEX_URL=https://download.pytorch.org/whl/cu124
@@ -25,24 +38,15 @@ ARG PIP_EXTRA_INDEX_URL=https://download.pytorch.org/whl/cu124
 ENV PIP_INDEX_URL=$PIP_INDEX_URL
 ENV PIP_EXTRA_INDEX_URL=$PIP_EXTRA_INDEX_URL
 
-RUN --mount=type=cache,target=/root/.cache/pip <<EOF
-git clone https://github.com/comfyanonymous/ComfyUI.git /ComfyUI
-git checkout $COMFYUI_TAG
+RUN --mount=type=cache,uid=$UID,gid=$GID,target=/ComfyUI/.cache/pip <<EOF
 python -m venv venv
+venv/bin/pip install -U pip setuptools
 venv/bin/pip install -r requirements.txt
-chown -R $UID:$GID .
 EOF
 
-COPY --chown=$UID:$GID extra_model_paths.yaml docker-entrypoint.sh start.sh .
+COPY --chown=$UID:$GID extra_model_paths.yaml .
+COPY --chown=$UID:$GID --chmod=755 docker-entrypoint.sh start.sh .
 
-RUN <<EOF
-groupadd --gid $GID comfy-user
-useradd -d /ComfyUI --uid $UID --gid $GID -M -N comfy-user
-install -d -o $UID -g $GID /data
-chmod a+x docker-entrypoint.sh start.sh
-EOF
-
-USER $UID:$GID
 VOLUME ["/data"]
 EXPOSE 8188/tcp
 
