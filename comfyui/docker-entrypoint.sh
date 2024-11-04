@@ -18,6 +18,7 @@ ln -s /data/custom_nodes
 mkdir -p /data/user /data/input /data/output /data/models/checkpoints \
   /data/models/clip /data/models/clip_vision /data/models/configs \
   /data/models/controlnet /data/models/embeddings /data/models/loras \
+  /data/models/text_encoders \
   /data/models/unet /data/models/upscale_models /data/models/vae \
   /data/pip-install
 
