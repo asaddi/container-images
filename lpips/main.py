@@ -2,6 +2,7 @@ from collections import namedtuple
 import os
 
 import lpips
+import numpy as np
 import PIL.Image
 import torch
 
@@ -9,12 +10,17 @@ import torch
 Output = namedtuple('Output', ['basename', 'difference'])
 
 
+def load_image(path):
+    img = PIL.Image.open(path)
+    return np.array(img)
+
+
 def main(reference_fn: str, images: list[str], cuda: bool=False, spatial_fn: str|None=None):
     loss_fn = lpips.LPIPS(net="alex", spatial=True)
     if cuda:
         loss_fn = loss_fn.cuda()
 
-    reference = lpips.im2tensor(lpips.load_image(reference_fn))
+    reference = lpips.im2tensor(load_image(reference_fn))
     if cuda:
         reference = reference.cuda()
 
@@ -23,7 +29,7 @@ def main(reference_fn: str, images: list[str], cuda: bool=False, spatial_fn: str
         base = os.path.basename(image_fn)
         base = os.path.splitext(base)[0]
 
-        img = lpips.im2tensor(lpips.load_image(image_fn))
+        img = lpips.im2tensor(load_image(image_fn))
         if cuda:
             img = img.cuda()
 
