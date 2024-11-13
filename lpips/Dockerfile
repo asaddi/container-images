@@ -35,4 +35,5 @@ VOLUME ["/data"]
 # Note: lpips downloads a model from HF(?)
 VOLUME ["/root/.cache/torch"]
 
-ENTRYPOINT ["/opt/conda/bin/python", "-i", "/workspace/main.py"]
+ENTRYPOINT ["/opt/conda/bin/python", "/workspace/main.py"]
+CMD ["--help"]
