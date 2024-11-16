@@ -42,10 +42,9 @@ def main(reference_fn: str, images: list[str], cuda: bool=False, spatial_fn: str
         print(f'{basename}: {difference.mean():.3f}')
 
         if spatial_fn is not None:
-            diff_array = (difference * 255.).to(torch.uint8)
-            diff_array = diff_array.repeat(1, 3, 1, 1)
+            diff_array = (255. * difference).clamp(0, 255).to(torch.uint8)
             diff_array = diff_array.permute(0, 2, 3, 1)
-            diff_img = PIL.Image.fromarray(diff_array.numpy()[0])
+            diff_img = PIL.Image.fromarray(diff_array.flatten(2).numpy()[0], mode="L")
             diff_img.save(f'{basename}-{spatial_fn}.png', 'PNG')
 
 
