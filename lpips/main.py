@@ -46,7 +46,7 @@ def main(reference_fn: str, images: list[str], cuda: bool=False, spatial_fn: str
             diff_array = diff_array.repeat(1, 3, 1, 1)
             diff_array = diff_array.permute(0, 2, 3, 1)
             diff_img = PIL.Image.fromarray(diff_array.numpy()[0])
-            diff_img.save(f'{spatial_fn}-{basename}.png', 'PNG')
+            diff_img.save(f'{basename}-{spatial_fn}.png', 'PNG')
 
 
 if __name__ == '__main__':
