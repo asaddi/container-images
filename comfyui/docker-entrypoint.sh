@@ -15,12 +15,25 @@ mv custom_nodes custom_nodes.orig
 ln -s /data/custom_nodes
 
 # Ensure appropriate directories exist in the data volume
-mkdir -p /data/user /data/input /data/output /data/models/checkpoints \
-  /data/models/clip /data/models/clip_vision /data/models/configs \
-  /data/models/controlnet /data/models/embeddings /data/models/loras \
-  /data/models/text_encoders \
-  /data/models/unet /data/models/upscale_models /data/models/vae \
-  /data/pip-install
+{
+    cat <<EOF
+user
+input
+output
+models/checkpoints
+models/clip
+models/clip_vision
+models/configs
+models/controlnet
+models/embeddings
+models/loras
+models/text_encoders
+models/unet
+models/upscale_models
+models/vae
+pip-install
+EOF
+} | (cd /data && xargs mkdir -p)
 
 # Install any additional requirements/wheels in /data/pip-install
 echo "==== Installing additional Python packages..."
