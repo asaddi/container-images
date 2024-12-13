@@ -15,7 +15,7 @@ EOF
 
 ENV LANG=en_US.utf8
 
-ARG COMFYUI_TAG=v0.2.7
+ARG COMFYUI_TAG=v0.3.7
 ARG UID=1000
 ARG GID=1000
 
@@ -51,5 +51,9 @@ COPY --chown=$UID:$GID --chmod=755 docker-entrypoint.sh start.sh .
 
 VOLUME ["/data"]
 EXPOSE 8188/tcp
+
+# Redirect these commonly-used caches to data volume
+ENV HF_HOME=/data/huggingface
+ENV TORCH_HOME=/data/torch
 
 ENTRYPOINT ["/ComfyUI/docker-entrypoint.sh"]

@@ -25,6 +25,7 @@ models/clip
 models/clip_vision
 models/configs
 models/controlnet
+models/diffusion_models
 models/embeddings
 models/loras
 models/text_encoders
